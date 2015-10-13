@@ -51,9 +51,5 @@ See the [xCache] readme for more information.
 ### License
 MIT
 
-### Potential Future Features
-* Handle Out Parameters caching
-* Add Reflection based extensions method to configure objects that use CacheAttribute in Aop.Unity
-
 [xCache]:https://github.com/Jarlotee/xCache/
 [library]:https://www.nuget.org/packages/xCache.Redis/
