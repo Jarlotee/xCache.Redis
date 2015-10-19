@@ -40,5 +40,27 @@ namespace xCache.Tests.Redis
 
             Assert.NotEqual(now, cached2);
         }
+
+        [Fact]
+        public void TestFiveSecondTimeoutStruct()
+        {
+            var key = "time2";
+
+            var now = DateTime.Now;
+
+            _cache.Add(key, now, new TimeSpan(0, 0, 5));
+
+            Thread.Sleep(new TimeSpan(0, 0, 2));
+
+            var cached = _cache.Get<DateTime>(key);
+
+            Assert.Equal(now, cached);
+
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+
+            var cached2 = _cache.Get<DateTime>(key);
+
+            Assert.NotEqual(now, cached2);
+        }
     }
 }

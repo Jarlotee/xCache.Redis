@@ -20,7 +20,7 @@ namespace xCache.Redis
 
         public T Deserialize<T>(string item)
         {
-            return (T)JsonConvert.DeserializeObject(item, _settings);
+            return JsonConvert.DeserializeObject<T>(item, _settings);
         }
 
         public string Serialize<T>(T item)
