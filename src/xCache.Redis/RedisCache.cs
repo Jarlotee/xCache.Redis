@@ -15,14 +15,14 @@ namespace xCache.Redis
             _serializer = serializer;
         }
 
-        public void Add<T>(string key, T item, TimeSpan expiration)
+        public void Add<T>(string key, CacheItem<T> item)
         {
             try
             {
                 var db = _multiplexer.GetDatabase();
 
                 db.StringSet(key, _serializer.Serialize(item));
-                db.KeyExpire(key, expiration);
+                db.KeyExpire(key, item.Expires);
             }
             catch (Exception ex)
             {
@@ -30,7 +30,7 @@ namespace xCache.Redis
             }
         }
 
-        public T Get<T>(string key)
+        CacheItem<T> ICache.Get<T>(string key)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace xCache.Redis
 
                 if (result.HasValue)
                 {
-                    return _serializer.Deserialize<T>(result);
+                    return _serializer.Deserialize<CacheItem<T>>(result);
                 }
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace xCache.Redis
                 Trace.TraceError("An error occured when trying to get an item from RedisCache [{0}] /nStack Trace: /n{1}", ex.Message, ex.StackTrace);
             }
 
-            return default(T);
+            return null;
         }
     }
 }

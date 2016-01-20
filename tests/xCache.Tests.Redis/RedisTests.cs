@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using xCache.Redis;
 using Xunit;
+using xCache.Extensions;
 
 namespace xCache.Tests.Redis
 {
@@ -26,19 +27,17 @@ namespace xCache.Tests.Redis
 
             var now = DateTime.Now.ToString();
 
-            _cache.Add(key, now, new TimeSpan(0,0,5));
+            _cache.Add(key, CacheExtensions.Wrap(now, DateTime.UtcNow.Add(new TimeSpan(0,0,5))));
 
             Thread.Sleep(new TimeSpan(0, 0, 2));
 
-            var cached = _cache.Get<string>(key);
+            var cached = CacheExtensions.Unwrap(_cache.Get<string>(key));
 
             Assert.Equal(now, cached);
 
             Thread.Sleep(new TimeSpan(0, 0, 5));
 
-            var cached2 = _cache.Get<string>(key);
-
-            Assert.NotEqual(now, cached2);
+            Assert.Null(_cache.Get<string>(key));
         }
 
         [Fact]
@@ -48,19 +47,17 @@ namespace xCache.Tests.Redis
 
             var now = DateTime.Now;
 
-            _cache.Add(key, now, new TimeSpan(0, 0, 5));
+            _cache.Add(key, CacheExtensions.Wrap(now, DateTime.UtcNow.Add(new TimeSpan(0, 0, 5))));
 
             Thread.Sleep(new TimeSpan(0, 0, 2));
 
-            var cached = _cache.Get<DateTime>(key);
+            var cached = CacheExtensions.Unwrap(_cache.Get<DateTime>(key));
 
             Assert.Equal(now, cached);
 
             Thread.Sleep(new TimeSpan(0, 0, 5));
 
-            var cached2 = _cache.Get<DateTime>(key);
-
-            Assert.NotEqual(now, cached2);
+            Assert.Null(_cache.Get<string>(key));
         }
     }
 }
