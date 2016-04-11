@@ -46,7 +46,7 @@ xCache.Redis is compliant with Aspect oriented programming (Aop)
 See the [xCache] readme for more information.
 
 ### Version
-0.2.0
+0.2.1
 
 Please note that xCache.Redis@0.1.0 is only compatible with the xCache@0.1.0
 
