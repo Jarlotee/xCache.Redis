@@ -50,5 +50,19 @@ namespace xCache.Redis
 
             return null;
         }
+
+        public bool Remove(string key)
+        {
+            try
+            {
+                var db = _multiplexer.GetDatabase();
+                return db.KeyDelete(key);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("An error occured when trying to remove an item to RedisCache [{0}] /n Stack Trace:/n{1}", ex.Message, ex.StackTrace);
+                return false;
+            }
+        }
     }
 }
